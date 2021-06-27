@@ -5,27 +5,50 @@ using UnityEngine;
 public class Movement : MonoBehaviour
 {
     private Rigidbody rb;
-    float speed = 20f;
-    private float timeCount = 0.0f;
-    private float yRot = 0f, xRot = 0f, zRot = 0f;
+    public float forwardSpeed = 20f;
+    public float horiSpeed = 10f;
+    public float vertiSpeed = 10f;
+    private float activeForwardSpeed, activeHoriSpeed, activeVertiSpeed;
+    public float forwardAccel = 20f;
+    public float horiAccel = 10f;
+    public float vertiAccel = 10f;
+    public float lookRotateSpeed = 90f;
+    private Vector2 lookInput, screenCenter, mouseDistance;
+    float xRot = 0f, yRot = 0f, zRot = 0f;
     // Start is called before the first frame update
     void Start()
     {
         rb = transform.GetComponent<Rigidbody>();
+        screenCenter.x = Screen.width * .5f;
+        screenCenter.y = Screen.height * .5f;
     }
 
     // Update is called once per frame
     void Update()
     {
-        float xMov = Input.GetAxisRaw("Horizontal");
-        float yMov = Input.GetAxisRaw("Vertical");
-        float zMov = Input.GetAxisRaw("Fly");
+        lookInput.x = Input.mousePosition.x;
+        lookInput.y = Input.mousePosition.y;
 
-        transform.position += transform.forward * speed * zMov * Time.deltaTime;
-        transform.position += transform.up * speed * yMov * Time.deltaTime;
-        //transform.position += transform.right * speed * xMov * Time.deltaTime;
+        mouseDistance.x = (lookInput.x - screenCenter.x) / screenCenter.y;
+        mouseDistance.y = (lookInput.y - screenCenter.y) / screenCenter.y;
+
+        mouseDistance = Vector2.ClampMagnitude(mouseDistance, 1f);
+
+        xRot = Mathf.Clamp(xRot + (-mouseDistance.y * lookRotateSpeed * Time.deltaTime), -30, 30);
+        yRot += mouseDistance.x * lookRotateSpeed * Time.deltaTime;
+        zRot = Mathf.Clamp(zRot + (-mouseDistance.x * lookRotateSpeed * Time.deltaTime), -60, 60);
+
+        transform.eulerAngles = new Vector3(xRot, yRot, zRot);
+
+        activeForwardSpeed = Mathf.Lerp(activeForwardSpeed, Input.GetAxisRaw("Fly") * forwardSpeed, forwardAccel * Time.deltaTime);
+        activeHoriSpeed = Mathf.Lerp(activeHoriSpeed, Input.GetAxisRaw("Horizontal") * horiSpeed, horiAccel * Time.deltaTime);
+        activeVertiSpeed = Mathf.Lerp(activeVertiSpeed, Input.GetAxisRaw("Vertical") * vertiSpeed, vertiAccel * Time.deltaTime);
+
+        transform.position += transform.forward * activeForwardSpeed * Time.deltaTime;
+        //transform.position += transform.up * activeVertiSpeed * Time.deltaTime;
+        //transform.position += transform.right * activeHoriSpeed * Time.deltaTime;
         //rb.velocity = transform.forward * speed;
-        Rotation(yMov,xMov);
+        //Rotation(yMov,xMov);
     }
 
     void Rotation(float pitch, float roll)
@@ -33,9 +56,9 @@ public class Movement : MonoBehaviour
         //float xRot = Mathf.LerpAngle(0, -(pitch * 30), 30 * Time.deltaTime);
         //float zRot = Mathf.Clamp(Mathf.LerpAngle(0, -(roll * 60), 30 * Time.deltaTime),-60,60);
         //pitch = Mathf.Clamp(pitch, -30, 30);
-        transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(-(pitch * 30), 0, -(roll * 60)), 30 * Time.deltaTime);
-        //yRot += roll * .1f;
-        //transform.eulerAngles = new Vector3(0, yRot, 0);
+        //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(-(pitch * 30), 0, -(roll * 60)), 30 * Time.deltaTime);
+        yRot += roll * .1f;
+        transform.eulerAngles = new Vector3(0, yRot, 0);
         //transform.localEulerAngles = new Vector3(-(pitch * 15), 0, -(roll * 15));
         //transform.eulerAngles = new Vector3(-(pitch * 30), 0, -(roll * 60));
     }
