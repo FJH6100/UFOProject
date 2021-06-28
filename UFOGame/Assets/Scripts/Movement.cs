@@ -34,11 +34,11 @@ public class Movement : MonoBehaviour
 
         mouseDistance = Vector2.ClampMagnitude(mouseDistance, 1f);
 
-        xRot = Mathf.Clamp(xRot + (-mouseDistance.y * lookRotateSpeed * Time.deltaTime), -30, 30);
-        yRot += mouseDistance.x * lookRotateSpeed * Time.deltaTime;
-        zRot = Mathf.Clamp(zRot + (-mouseDistance.x * lookRotateSpeed * Time.deltaTime), -60, 60);
+        //xRot = Mathf.Clamp(xRot + (-mouseDistance.y * lookRotateSpeed * Time.deltaTime), -30, 30);
+        //yRot += mouseDistance.x * lookRotateSpeed * Time.deltaTime;
+        //zRot = Mathf.Clamp(zRot + (-mouseDistance.x * lookRotateSpeed * Time.deltaTime), -60, 60);
 
-        transform.eulerAngles = new Vector3(xRot, yRot, zRot);
+        //transform.eulerAngles = new Vector3(xRot, yRot, zRot);
 
         activeForwardSpeed = Mathf.Lerp(activeForwardSpeed, Input.GetAxisRaw("Fly") * forwardSpeed, forwardAccel * Time.deltaTime);
         activeHoriSpeed = Mathf.Lerp(activeHoriSpeed, Input.GetAxisRaw("Horizontal") * horiSpeed, horiAccel * Time.deltaTime);
@@ -48,18 +48,15 @@ public class Movement : MonoBehaviour
         //transform.position += transform.up * activeVertiSpeed * Time.deltaTime;
         //transform.position += transform.right * activeHoriSpeed * Time.deltaTime;
         //rb.velocity = transform.forward * speed;
-        //Rotation(yMov,xMov);
+        Rotation(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
     }
 
-    void Rotation(float pitch, float roll)
+    void Rotation(float xValue, float yValue)
     {
-        //float xRot = Mathf.LerpAngle(0, -(pitch * 30), 30 * Time.deltaTime);
-        //float zRot = Mathf.Clamp(Mathf.LerpAngle(0, -(roll * 60), 30 * Time.deltaTime),-60,60);
-        //pitch = Mathf.Clamp(pitch, -30, 30);
-        //transform.rotation = Quaternion.RotateTowards(transform.rotation, Quaternion.Euler(-(pitch * 30), 0, -(roll * 60)), 30 * Time.deltaTime);
-        yRot += roll * .1f;
-        transform.eulerAngles = new Vector3(0, yRot, 0);
-        //transform.localEulerAngles = new Vector3(-(pitch * 15), 0, -(roll * 15));
-        //transform.eulerAngles = new Vector3(-(pitch * 30), 0, -(roll * 60));
+        xRot = Mathf.Clamp(xRot + (-yValue * lookRotateSpeed * Time.deltaTime), -30, 30);
+        yRot += xValue * lookRotateSpeed * Time.deltaTime;
+        zRot = Mathf.Clamp(zRot + (-xValue * lookRotateSpeed * Time.deltaTime), -60, 60);
+
+        transform.eulerAngles = new Vector3(xRot, yRot, zRot);
     }
 }

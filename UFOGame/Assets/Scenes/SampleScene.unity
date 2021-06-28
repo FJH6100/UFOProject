@@ -346,6 +346,10 @@ MonoBehaviour:
   forwardSpeed: 20
   horiSpeed: 10
   vertiSpeed: 10
+  forwardAccel: 20
+  horiAccel: 10
+  vertiAccel: 10
+  lookRotateSpeed: 90
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,9 +539,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a30d6629533ce5f418982a41f669ba7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forwardSpeed: 40
+  forwardSpeed: 65
   horiSpeed: 20
   vertiSpeed: 20
+  forwardAccel: 30
+  horiAccel: 10
+  vertiAccel: 10
+  lookRotateSpeed: 90
 --- !u!54 &764733720
 Rigidbody:
   m_ObjectHideFlags: 0
