@@ -22,15 +22,65 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        activeForwardSpeed = Mathf.Lerp(activeForwardSpeed, Input.GetAxisRaw("Fly") * forwardSpeed, forwardAccel * Time.deltaTime);
-        activeHoriSpeed = Mathf.Lerp(activeHoriSpeed, Input.GetAxisRaw("Horizontal") * horiSpeed, horiAccel * Time.deltaTime);
-        activeVertiSpeed = Mathf.Lerp(activeVertiSpeed, Input.GetAxisRaw("Vertical") * vertiSpeed, vertiAccel * Time.deltaTime);
+        activeForwardSpeed = Mathf.Lerp(activeForwardSpeed, Input.GetAxis("Fly") * forwardSpeed, forwardAccel * Time.deltaTime);
+        activeHoriSpeed = Mathf.Lerp(activeHoriSpeed, Input.GetAxis("Horizontal") * horiSpeed, horiAccel * Time.deltaTime);
+        activeVertiSpeed = Mathf.Lerp(activeVertiSpeed, Input.GetAxis("Vertical") * vertiSpeed, vertiAccel * Time.deltaTime);
 
         transform.position += transform.forward * activeForwardSpeed * Time.deltaTime;
         //transform.position += transform.up * activeVertiSpeed * Time.deltaTime;
         //transform.position += transform.right * activeHoriSpeed * Time.deltaTime;
 
         Rotation(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S))
+        {
+            StartCoroutine(LevelOutXRot());
+        }
+        if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+        {
+            StartCoroutine(LevelOutZRot());
+        }
+    }
+
+    IEnumerator LevelOutXRot()
+    {
+        if (xRot < 0)
+        {
+            while (xRot < 0)
+            {
+                xRot += .1f;
+                yield return null;
+            }
+        }
+        else if (xRot > 0)
+        {
+            while (xRot > 0)
+            {
+                xRot -= .1f;
+                yield return null;
+            }
+        }
+        xRot = 0f;
+    }
+
+    IEnumerator LevelOutZRot()
+    {
+        if (zRot < 0)
+        {
+            while (zRot < 0)
+            {
+                zRot += .1f;
+                yield return null;
+            }
+        }
+        else if (zRot > 0)
+        {
+            while (zRot > 0)
+            {
+                zRot -= .1f;
+                yield return null;
+            }
+        }
+        zRot = 0f;
     }
 
     void Rotation(float xValue, float yValue)
