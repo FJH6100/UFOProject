@@ -22,5 +22,6 @@ public class Ring : MonoBehaviour
     {
         int myScore = System.Convert.ToInt32(score.text) + 1;
         score.text = myScore.ToString();
+        Destroy(gameObject);
     }
 }

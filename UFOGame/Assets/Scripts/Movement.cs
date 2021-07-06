@@ -13,6 +13,8 @@ public class Movement : MonoBehaviour
     public float vertiAccel = 10f;
     public float lookRotateSpeed = 90f;
     float xRot = 0f, yRot = 0f, zRot = 0f;
+    public GameObject bullet;
+    float fireTimer = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +24,8 @@ public class Movement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        fireTimer += Time.deltaTime;
+
         activeForwardSpeed = Mathf.Lerp(activeForwardSpeed, Input.GetAxis("Fly") * forwardSpeed, forwardAccel * Time.deltaTime);
         activeHoriSpeed = Mathf.Lerp(activeHoriSpeed, Input.GetAxis("Horizontal") * horiSpeed, horiAccel * Time.deltaTime);
         activeVertiSpeed = Mathf.Lerp(activeVertiSpeed, Input.GetAxis("Vertical") * vertiSpeed, vertiAccel * Time.deltaTime);
@@ -38,6 +42,19 @@ public class Movement : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.LeftArrow) || Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
         {
             StartCoroutine(LevelOutZRot());
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
+        {
+            StopCoroutine(LevelOutXRot());
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D))
+        {
+            StopCoroutine(LevelOutZRot());
+        }
+        if (Input.GetButton("Jump") && fireTimer >= .2f)
+        {
+            Instantiate(bullet, transform.position, transform.rotation * Quaternion.Euler(0, transform.rotation.y, 0));
+            fireTimer = 0f;
         }
     }
 
