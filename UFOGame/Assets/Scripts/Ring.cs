@@ -20,8 +20,11 @@ public class Ring : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        int myScore = System.Convert.ToInt32(score.text) + 1;
-        score.text = myScore.ToString();
-        Destroy(gameObject);
+        if (other.gameObject.tag == "Player")
+        {
+            int myScore = System.Convert.ToInt32(score.text) + 1;
+            score.text = myScore.ToString();
+            Destroy(gameObject);
+        }
     }
 }
