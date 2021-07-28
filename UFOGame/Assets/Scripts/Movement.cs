@@ -55,6 +55,7 @@ public class Movement : MonoBehaviour
         {
             Instantiate(bullet, transform.position, transform.rotation * Quaternion.Euler(0, transform.rotation.y, 0));
             fireTimer = 0f;
+            AchievementSystem.shootAchievement.Invoke();
         }
     }
 
